@@ -1,0 +1,4 @@
+(library
+ (public_name llvmutils)
+ (libraries llvm llvm.bitreader llvm.irreader)
+ (flags -w +32+34))
