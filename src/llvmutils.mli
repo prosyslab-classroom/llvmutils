@@ -9,6 +9,11 @@ type debug_loc = {
 
 val debug_location : Llvm.llcontext -> Llvm.llvalue -> debug_loc option
 
+(** {2 Helper functions} *)
+
+val find_main : Llvm.llmodule -> Llvm.llvalue
+(** return a function with name [main] in given llmodule. If no such function exists, [failwith "main funtion not found"]. *)
+
 (** {2 Test functions} *)
 
 val is_assignment : Llvm.Opcode.t -> bool
@@ -23,11 +28,20 @@ val is_unary_op : Llvm.Opcode.t -> bool
 val is_binary_op : Llvm.Opcode.t -> bool
 (** check if a given LLVM instruction is a binary operator. *)
 
+val is_input : Llvm.llvalue -> bool
+(** when given llvalue is [Llvm.Opcode.Call], check if a callee is [input]. If not [Llvm.Opcode.Call], undefined behavior. *)
+
+val is_print : Llvm.llvalue -> bool
+(** when given llvalue is [Llvm.Opcode.Call], check if a callee is [print]. If not [Llvm.Opcode.Call], undefined behavior. *)
+
 val is_source : Llvm.llvalue -> bool
+(** when given llvalue is [Llvm.Opcode.Call], check if a callee is [source]. If not [Llvm.Opcode.Call], undefined behavior. *)
 
 val is_sink : Llvm.llvalue -> bool
+(** when given llvalue is [Llvm.Opcode.Call], check if a callee is [sink]. If not [Llvm.Opcode.Call], undefined behavior. *)
 
 val is_sanitizer : Llvm.llvalue -> bool
+(** when given llvalue is [Llvm.Opcode.Call], check if a callee is [sanitizer]. If not [Llvm.Opcode.Call], undefined behavior. *)
 
 val is_llvm_function : Llvm.llvalue -> bool
 
