@@ -7,7 +7,7 @@ authors: "Programming Systems Laboratory, KAIST"
 homepage: "https://github.com/prosyslab-classroom/llvm-utils"
 bug-reports: "https://github.com/prosyslab-classroom/llvm-utils"
 license: "BSD"
-dev-repo: "git+https://github.com/hyunsukimsokcho/llvm-utils.git"
+dev-repo: "git+https://github.com/prosyslab-classroom/llvm-utils.git"
 build: [["dune" "build" "-p" name "-j" jobs "@install" "@doc"]]
 depends: [
   "ocaml" {>="4.08.0"}
