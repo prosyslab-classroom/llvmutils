@@ -127,6 +127,10 @@ let function_name instr =
   let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in
   Llvm.value_name callee_expr
 
+let is_input instr = function_name instr = "input"
+
+let is_print instr = function_name instr = "print"
+
 let is_source instr = function_name instr = "source"
 
 let is_sink instr = function_name instr = "sink"
@@ -151,14 +155,6 @@ let is_debug instr =
       let r1 = Str.regexp "llvm\\.dbg\\..+" in
       Str.string_match r1 (Llvm.value_name callee_expr) 0
   | _ -> false
-
-let is_input instr =
-  let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in
-  Llvm.value_name callee_expr = "input"
-
-let is_print instr =
-  let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in
-  Llvm.value_name callee_expr = "print"
 
 let is_llvm_intrinsic instr =
   let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in

@@ -1,5 +1,5 @@
 opam-version: "2.0"
-name: "llvm-utils"
+name: "llvmutils"
 version: "0.1"
 synopsis: "Utilities for LLVM APIs"
 maintainer: "Programming Systems Laboratory, KAIST"
@@ -10,5 +10,5 @@ license: "BSD"
 dev-repo: "git+https://github.com/prosyslab-classroom/llvm-utils.git"
 build: [["dune" "build" "-p" name "-j" jobs "@install" "@doc"]]
 depends: [
-  "ocaml" {>="4.11.0"}
+  "ocaml" {>="4.08.0"}
 ]
