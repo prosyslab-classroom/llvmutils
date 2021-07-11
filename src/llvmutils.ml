@@ -14,10 +14,10 @@ type debug_loc = {
   column : int;
 }
 
+let get_function instr = instr |> Llvm.instr_parent |> Llvm.block_parent
+
 let debug_location llctx instr =
-  let funname =
-    Llvm.instr_parent instr |> Llvm.block_parent |> Llvm.value_name
-  in
+  let funname = get_function instr |> Llvm.value_name in
   let dbg = Llvm.metadata instr (Llvm.mdkind_id llctx "dbg") in
   match dbg with
   | Some s -> (
@@ -81,6 +81,9 @@ let is_argument exp =
   | Llvm.ValueKind.Argument -> true
   | _ -> false
 
+let is_call instr =
+  match Llvm.instr_opcode instr with Llvm.Opcode.Call -> true | _ -> false
+
 let string_of_exp exp =
   match Llvm.classify_value exp with
   | Llvm.ValueKind.NullValue -> "0"
@@ -102,6 +105,8 @@ let string_of_exp exp =
   | Instruction i when is_assignment i -> string_of_lhs exp
   | Instruction _ -> string_of_instr exp
 
+let string_of_function = Llvm.value_name
+
 let fold_left_all_instr f a m =
   Llvm.fold_left_functions
     (fun a func ->
@@ -118,24 +123,39 @@ let string_of_location llctx instr =
       s.filename ^ ":" ^ s.funname ^ ":" ^ string_of_int s.line ^ ":"
       ^ string_of_int s.column
   | None ->
-      let funname =
-        Llvm.instr_parent instr |> Llvm.block_parent |> Llvm.value_name
-      in
+      let funname = get_function instr |> Llvm.value_name in
       funname ^ ":0:0"
 
 let function_name instr =
   let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in
   Llvm.value_name callee_expr
 
-let is_input instr = function_name instr = "input"
+let is_input instr =
+  if is_call instr then function_name instr = "input" else false
 
-let is_print instr = function_name instr = "print"
+let is_print instr =
+  if is_call instr then function_name instr = "print" else false
 
-let is_source instr = function_name instr = "source"
+let is_print_num instr =
+  if is_call instr then function_name instr = "print_num" else false
 
-let is_sink instr = function_name instr = "sink"
+let is_print_ptr instr =
+  if is_call instr then function_name instr = "print_ptr" else false
 
-let is_sanitizer instr = function_name instr = "sanitizer"
+let is_print_mem instr =
+  if is_call instr then function_name instr = "print_mem" else false
+
+let is_malloc instr =
+  if is_call instr then function_name instr = "malloc" else false
+
+let is_source instr =
+  if is_call instr then function_name instr = "source" else false
+
+let is_sink instr =
+  if is_call instr then function_name instr = "sink" else false
+
+let is_sanitizer instr =
+  if is_call instr then function_name instr = "sanitizer" else false
 
 let is_llvm_function f =
   let r1 = Str.regexp "llvm\\.dbg\\..+" in
@@ -148,17 +168,20 @@ let find_main llm =
   | Some f -> f
   | None -> failwith "main funtion not found"
 
+let entry_point f = Llvm.entry_block f |> Llvm.instr_begin
+
 let is_debug instr =
-  match Llvm.instr_opcode instr with
-  | Llvm.Opcode.Call ->
-      let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in
-      let r1 = Str.regexp "llvm\\.dbg\\..+" in
-      Str.string_match r1 (Llvm.value_name callee_expr) 0
-  | _ -> false
+  if is_call instr then
+    let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in
+    let r1 = Str.regexp "llvm\\.dbg\\..+" in
+    Str.string_match r1 (Llvm.value_name callee_expr) 0
+  else false
 
 let is_llvm_intrinsic instr =
-  let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in
-  is_llvm_function callee_expr
+  if is_call instr then
+    let callee_expr = Llvm.operand instr (Llvm.num_operands instr - 1) in
+    is_llvm_function callee_expr
+  else false
 
 let neg_pred = function
   | Llvm.Icmp.Eq -> Llvm.Icmp.Ne
