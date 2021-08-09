@@ -107,6 +107,13 @@ let string_of_exp exp =
 
 let string_of_function = Llvm.value_name
 
+let iter_all_instr f m =
+  Llvm.iter_functions
+    (fun func ->
+      if Llvm.is_declaration func then ()
+      else Llvm.iter_blocks (Llvm.iter_instrs f) func)
+    m
+
 let fold_left_all_instr f a m =
   Llvm.fold_left_functions
     (fun a func ->
@@ -156,6 +163,8 @@ let is_sink instr =
 
 let is_sanitizer instr =
   if is_call instr then function_name instr = "sanitizer" else false
+
+let is_src instr = function_name instr = "src"
 
 let is_llvm_function f =
   let r1 = Str.regexp "llvm\\.dbg\\..+" in

@@ -11,6 +11,9 @@ val debug_location : Llvm.llcontext -> Llvm.llvalue -> debug_loc option
 
 (** {2 Helper functions} *)
 
+val iter_all_instr : (Llvm.llvalue -> unit) -> Llvm.llmodule -> unit
+(** [iter_all_instr f m] applies function [f] in turn to all instructions in [m]. *)
+
 val fold_left_all_instr :
   ('a -> Llvm.llvalue -> 'a) -> 'a -> Llvm.llmodule -> 'a
 (** [fold_left_all_instr f a m] returns [f (... f (f (f a i1) i2) i3 ...) in], where [i1..in] are the instructions in [m]. *)
@@ -24,7 +27,8 @@ val entry_point : Llvm.llvalue -> (Llvm.llbasicblock, Llvm.llvalue) Llvm.llpos
 val get_function : Llvm.llvalue -> Llvm.llvalue
 (** [get_function instr] returns the function that contains [instr]. *)
 
-val get_next_nonphi : Llvm.llvalue -> (Llvm.llbasicblock, Llvm.llvalue) Llvm.llpos
+val get_next_nonphi :
+  Llvm.llvalue -> (Llvm.llbasicblock, Llvm.llvalue) Llvm.llpos
 (** [get_next_nonphi instr] returns the position of the instruction that is not [Llvm.Opcode.PHI] after [instr]. *)
 
 val get_next_phi : Llvm.llvalue -> (Llvm.llbasicblock, Llvm.llvalue) Llvm.llpos
@@ -76,6 +80,9 @@ val is_sink : Llvm.llvalue -> bool
 
 val is_sanitizer : Llvm.llvalue -> bool
 (** [is_sanitizer instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is [sanitizer]. *)
+
+val is_src : Llvm.llvalue -> bool
+(** [is_src instr] checks if the callee of [instr] is [src]. *)
 
 val is_llvm_intrinsic : Llvm.llvalue -> bool
 (** [is_llvm_intrinsic instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is a LLVM intrinsic function. *)
