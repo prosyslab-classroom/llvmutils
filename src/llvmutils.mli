@@ -81,9 +81,6 @@ val is_sink : Llvm.llvalue -> bool
 val is_sanitizer : Llvm.llvalue -> bool
 (** [is_sanitizer instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is [sanitizer]. *)
 
-val is_src : Llvm.llvalue -> bool
-(** [is_src instr] checks if the callee of [instr] is [src]. *)
-
 val is_llvm_intrinsic : Llvm.llvalue -> bool
 (** [is_llvm_intrinsic instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is a LLVM intrinsic function. *)
 

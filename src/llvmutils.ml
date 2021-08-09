@@ -164,8 +164,6 @@ let is_sink instr =
 let is_sanitizer instr =
   if is_call instr then function_name instr = "sanitizer" else false
 
-let is_src instr = function_name instr = "src"
-
 let is_llvm_function f =
   let r1 = Str.regexp "llvm\\.dbg\\..+" in
   let r2 = Str.regexp "llvm\\.lifetime\\..+" in
