@@ -203,8 +203,8 @@ let neg_pred = function
   | Llvm.Icmp.Uge -> Llvm.Icmp.Ult
 
 let flip_pred = function
-  | Llvm.Icmp.Eq -> Llvm.Icmp.Ne
-  | Llvm.Icmp.Ne -> Llvm.Icmp.Eq
+  | Llvm.Icmp.Eq -> Llvm.Icmp.Eq
+  | Llvm.Icmp.Ne -> Llvm.Icmp.Ne
   | Llvm.Icmp.Slt -> Llvm.Icmp.Sgt
   | Llvm.Icmp.Ult -> Llvm.Icmp.Ugt
   | Llvm.Icmp.Sle -> Llvm.Icmp.Sge
