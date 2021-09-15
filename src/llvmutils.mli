@@ -40,6 +40,9 @@ val neg_pred : Llvm.Icmp.t -> Llvm.Icmp.t
 val flip_pred : Llvm.Icmp.t -> Llvm.Icmp.t
 (** [flip_pred pr] is flipped form of the predicate [pr]. *)
 
+val function_name : Llvm.llvalue -> string
+(** [function_name instr] returns the name of the function called at [instr]. If [instr] is not a function call, it may crash. *)
+
 (** {2 Test functions} *)
 
 val is_assignment : Llvm.Opcode.t -> bool
