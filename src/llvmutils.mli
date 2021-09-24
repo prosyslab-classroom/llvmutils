@@ -29,10 +29,10 @@ val get_function : Llvm.llvalue -> Llvm.llvalue
 
 val get_next_nonphi :
   Llvm.llvalue -> (Llvm.llbasicblock, Llvm.llvalue) Llvm.llpos
-(** [get_next_nonphi instr] returns the position of the instruction that is not [Llvm.Opcode.PHI] after [instr]. *)
+(** [get_next_nonphi instr] returns the position of the instruction that is not [Llvm.Opcode.PHI] after [instr], or raise [Not_found] if there is no such instruction in the same basic block. *)
 
 val get_next_phi : Llvm.llvalue -> (Llvm.llbasicblock, Llvm.llvalue) Llvm.llpos
-(** [get_next_phi instr] returns the position of the instruction that is [Llvm.Opcode.PHI] after [instr]. *)
+(** [get_next_phi instr] returns the position of the instruction that is [Llvm.Opcode.PHI] after [instr], or raise [Not_found] if there is no such instruction in the same basic block. *)
 
 val neg_pred : Llvm.Icmp.t -> Llvm.Icmp.t
 (** [neg_pred pr] is negated form of the predicate [pr]. *)
