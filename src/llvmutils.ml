@@ -73,6 +73,12 @@ let is_unary_op = function
       true
   | _ -> false
 
+let is_assignment_instr instr =
+  match Llvm.instr_opcode instr with
+  | Llvm.Opcode.Call ->
+      Llvm.type_of instr |> Llvm.classify_type <> Llvm.TypeKind.Void
+  | op -> is_assignment op
+
 let is_phi instr =
   match Llvm.instr_opcode instr with Llvm.Opcode.PHI -> true | _ -> false
 
@@ -163,6 +169,12 @@ let is_sink instr =
 
 let is_sanitizer instr =
   if is_call instr then function_name instr = "sanitizer" else false
+
+let is_assume instr =
+  if is_call instr then function_name instr = "assume" else false
+
+let is_assert_fail instr =
+  if is_call instr then function_name instr = "__assert_fail" else false
 
 let is_llvm_function f =
   let r1 = Str.regexp "llvm\\.dbg\\..+" in

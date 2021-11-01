@@ -46,7 +46,10 @@ val function_name : Llvm.llvalue -> string
 (** {2 Test functions} *)
 
 val is_assignment : Llvm.Opcode.t -> bool
-(** check if a given LLVM instruction is an assignment. *)
+(** check if a given LLVM instruction is an assignment operator. *)
+
+val is_assignment_instr : Llvm.llvalue -> bool
+(** check if a given LLVM instruction is an assignment instruction. *)
 
 val is_phi : Llvm.llvalue -> bool
 (** check if a given LLVM instruction is a phi node. *)
@@ -86,6 +89,12 @@ val is_sink : Llvm.llvalue -> bool
 
 val is_sanitizer : Llvm.llvalue -> bool
 (** [is_sanitizer instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is [sanitizer]. *)
+
+val is_assume : Llvm.llvalue -> bool
+(** [is_assume instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is [assume]. *)
+
+val is_assert_fail : Llvm.llvalue -> bool
+(** [is_assert_fail instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is [__assert_fail]. *)
 
 val is_debug : Llvm.llvalue -> bool
 (** [is_debug instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is a LLVM debug function. *)
