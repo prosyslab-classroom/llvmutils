@@ -63,6 +63,9 @@ val is_binary_op : Llvm.Opcode.t -> bool
 val is_call : Llvm.llvalue -> bool
 (** check if a given LLVM instruction is a function call. *)
 
+val is_argument : Llvm.llvalue -> bool
+(** [is_argument instr] checks if [instr] is [Llvm.ValueKind.Argument]. *)
+
 val is_input : Llvm.llvalue -> bool
 (** [is_input instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is [input]. *)
 
