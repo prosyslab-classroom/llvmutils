@@ -202,6 +202,16 @@ let is_llvm_intrinsic instr =
     is_llvm_function callee_expr
   else false
 
+let first_label f =
+  let rec get_label pos =
+    match pos with
+    | Llvm.At_end _ -> failwith "unreachable"
+    | Llvm.Before instr ->
+        if not (is_debug instr) then pos
+        else get_label (Llvm.instr_succ instr)
+  in
+  Llvm.entry_block f |> Llvm.instr_begin |> get_label
+
 let neg_pred = function
   | Llvm.Icmp.Eq -> Llvm.Icmp.Ne
   | Llvm.Icmp.Ne -> Llvm.Icmp.Eq

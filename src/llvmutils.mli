@@ -105,6 +105,9 @@ val is_debug : Llvm.llvalue -> bool
 val is_llvm_intrinsic : Llvm.llvalue -> bool
 (** [is_llvm_intrinsic instr] checks if [instr] is [Llvm.Opcode.Call] and the callee is a LLVM intrinsic function. *)
 
+val first_label : Llvm.llvalue -> (Llvm.llbasicblock, Llvm.llvalue) Llvm.llpos
+(** [first_label m] returns the position of the first instruction in function [f]. *)
+
 val is_llvm_function : Llvm.llvalue -> bool
 
 (** {2 Pretty printers} *)
