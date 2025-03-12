@@ -108,6 +108,7 @@ let string_of_exp exp =
   | GlobalIFunc | GlobalAlias -> string_of_llvalue_cache exp
   | GlobalVariable -> Llvm.value_name exp
   | UndefValue -> "undef"
+  | PoisonValue -> "poison"
   | Instruction i when is_assignment i -> string_of_lhs exp
   | Instruction _ -> string_of_instr exp
 
