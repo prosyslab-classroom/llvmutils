@@ -10,6 +10,6 @@ license: "BSD"
 dev-repo: "git+https://github.com/prosyslab-classroom/llvmutils.git"
 build: [["dune" "build" "-p" name "-j" jobs "@install" "@doc"]]
 depends: [
-  "ocaml" {>="4.11.0"}
+  "ocaml" {>="5.1.0"}
   "llvm" {= "15.0.7+nnp-3"}
 ]
