@@ -12,4 +12,5 @@ build: [["dune" "build" "-p" name "-j" jobs "@install" "@doc"]]
 depends: [
   "ocaml" {>="5.1.0"}
   "llvm" {= "15.0.7+nnp-3"}
+  "odoc" {>= "3.0.0"}
 ]
